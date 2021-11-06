@@ -117,3 +117,4 @@ coder_gTest : coder.o coder_gTest.o gtest_main.a
 	@echo "Building $@ for $(KERNEL_NAME) $(MACHINE_NAME)"
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@ -L. -L$(LIB_DIR) -l$(LIB_ENCODE)
 	./$(TESTS)
+
