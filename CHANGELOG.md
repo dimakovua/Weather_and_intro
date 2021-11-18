@@ -1,3 +1,9 @@
+## [1.0.4] - 2021-11-18
+### Added
+- .gitlab-ci.yml file to run pipeline
+### Changed
+- CHANGELOG.md file
+
 ## [1.0.3] - 2021-11-06
 ### Added
 - CHANGELOG.md file
