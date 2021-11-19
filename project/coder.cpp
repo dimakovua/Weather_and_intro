@@ -66,7 +66,7 @@ void Coder::set(const char* buf, int size) {
   m_buf = new char[size + 1];
 
   if (buf == 0) throw std::logic_error(":(");
-  if (size <= 0 || size == std::numeric_limits<unsigned int>::max())
+  if (size <= 0 || (size_t)size == std::numeric_limits<unsigned int>::max())
     throw std::logic_error(":(");  // for init_len TEST
   // std::cout << "SIZE IS " << size;
   memcpy(m_buf, buf, size);

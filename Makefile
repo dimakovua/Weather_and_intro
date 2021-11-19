@@ -24,12 +24,14 @@ endif
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g -std=gnu++11 -Wall -Wextra -pthread
+CXXFLAGS += -std=c++11 -Wall -Wextra -pedantic -Werror
+CXXFLAGS_for_tests += -std=c++11 -Wall -Wextra -pedantic
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
 TESTS = coder_gTest
-
+CXX = clang++
+CXX_for_tests = g++
 SOURCE_DIR = project
 LIB_DIR = project
 TEST_DIR = test
@@ -74,6 +76,7 @@ endif
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
+
 # House-keeping build targets.
 all : $(TESTS)
 
@@ -95,7 +98,7 @@ gtest-all.o : $(GTEST_SRCS_)
             $(GTEST_DIR)/src/gtest-all.cc
 
 gtest_main.o : $(GTEST_SRCS_)
-	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
+	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS_for_tests) -c \
             $(GTEST_DIR)/src/gtest_main.cc
 
 gtest.a : gtest-all.o
@@ -111,7 +114,7 @@ coder.o : $(SOURCE_DIR)/coder.cpp $(SOURCE_DIR)/coder.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SOURCE_DIR)/coder.cpp
 
 coder_gTest.o : $(TEST_DIR)/coder_gTest.cpp $(SOURCE_DIR)/coder.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) -I$(SOURCE_DIR) $(CXXFLAGS) -c $(TEST_DIR)/coder_gTest.cpp
+	$(CXX) $(CPPFLAGS) -I$(SOURCE_DIR) $(CXXFLAGS_for_tests) -c $(TEST_DIR)/coder_gTest.cpp
 
 coder_gTest : coder.o coder_gTest.o gtest_main.a
 	@echo "Building $@ for $(KERNEL_NAME) $(MACHINE_NAME)"
