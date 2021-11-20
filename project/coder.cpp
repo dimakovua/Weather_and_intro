@@ -40,7 +40,7 @@ Coder::Coder(const Coder& right) : m_buf(right.buf()), m_size(right.size()) {
   // return *this;
 }
 Coder::~Coder() {
-  delete m_buf;
+  delete[] m_buf;
   m_size = 0;
 }
 Coder& Coder::operator=(const Coder& right) {
@@ -78,7 +78,7 @@ char* Coder::buf() const { return m_buf; }
 int Coder::size() const { return m_size; }
 
 void Coder::decode() {
-  delete m_buf;
+  delete[] m_buf;
   m_buf = new char[data_size];
   for (int i = 0; i < data_size - 1; i++) {
     if (data + i == NULL) {

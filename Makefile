@@ -118,6 +118,7 @@ coder_gTest.o : $(TEST_DIR)/coder_gTest.cpp $(SOURCE_DIR)/coder.h $(GTEST_HEADER
 
 coder_gTest : coder.o coder_gTest.o gtest_main.a
 	@echo "Building $@ for $(KERNEL_NAME) $(MACHINE_NAME)"
+	cppcheck --language=c++ project/coder.cpp project/coder.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@ -L. -L$(LIB_DIR) -l$(LIB_ENCODE)
 	./$(TESTS)
 
