@@ -115,13 +115,13 @@ gtest_main.a : gtest-all.o gtest_main.o
 # gtest_main.a, depending on whether it defines its own main()
 # function.
 coder.o : $(SOURCE_DIR)/coder.cpp $(SOURCE_DIR)/coder.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SOURCE_DIR)/coder.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SOURCE_DIR)/coder.cpp -fsanitize=address,undefined
 
 coder_gTest.o : $(TEST_DIR)/coder_gTest.cpp $(SOURCE_DIR)/coder.h $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) -I$(SOURCE_DIR) $(CXXFLAGS_for_tests) -c $(TEST_DIR)/coder_gTest.cpp
 
 coder_gTest : coder.o coder_gTest.o gtest_main.a
 	@echo "Building $@ for $(KERNEL_NAME) $(MACHINE_NAME)"
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@ -L. -L$(LIB_DIR) -l$(LIB_ENCODE)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@ -L. -L$(LIB_DIR) -l$(LIB_ENCODE) -fsanitize=address,undefined
 	./$(TESTS)
 

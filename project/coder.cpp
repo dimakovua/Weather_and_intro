@@ -29,8 +29,8 @@
 char* data = nullptr;  // NOLINT cannot be const or non-global
 int data_size = 0;     // NOLINT cannot be const or non-global
 Coder::Coder() {
-  m_buf = 0;   // NOLINT
-  m_size = 0;  // NOLINT
+  m_buf = nullptr;   
+  m_size = 0;  
 }
 Coder::Coder(const Coder& right) : m_buf(right.buf()), m_size(right.size()) {
   // this->m_size = right.size();
@@ -50,6 +50,7 @@ Coder& Coder::operator=(const Coder& right) {
     return *this;
   }
   this->m_size = right.size();
+  delete[] this->m_buf;
   this->m_buf = new char[this->m_size + 1];  // NOLINT pointers
   this->m_buf[this->m_size] = '\0';  // NOLINT do not use pointers arithmetic(
   strcpy(this->m_buf, right.buf());  // NOLINT use of undeclared identifier 'strlcpy'; did
@@ -65,7 +66,7 @@ void Coder::encode() {
 }
 
 void Coder::set(const char* buf, int size) {
-  delete m_buf;
+  delete[] m_buf;
   m_buf = new char[size + 1];  // NOLINT doesn't like pointers
 
   if (buf == nullptr) {
