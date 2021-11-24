@@ -1,3 +1,33 @@
+## [1.0.8] - 2021-11-20
+### Added
+- clang sanitizer
+### Fixed
+- Found two last memory leaks in project/coder.cpp
+### Changed
+- Sanitizer's keys added in Makefile
+## [1.0.7] - 2021-11-20
+### Added
+- .clang-tidy file to use clang-tidy
+- .clang-tidy installation in gitlab-ci.yml
+- clang-tidy and cppcheck targets in Makefile
+### Fixed
+- Some memory leak
+- Now we use nullptr instead of 0
+## [1.0.6] - 2021-11-20
+### Added
+- cppcheck in Makefile
+- cppcheck installation in gitlab-ci.yml
+### Fixed
+- Memory leak in project/coder.cpp
+## [1.0.5] - 2021-11-20
+### Added
+- Warning are errors pedantic flag
+- CXX flags for tests to ignore errors in gTests (we are not allowed to edit some files)
+- clang installation in gitlab-ci.yml
+### Changed
+- Now Makefile uses clang++
+- Now project/coder.cpp uses static_cast<> instead of c-function
+
 ## [1.0.4] - 2021-11-18
 ### Added
 - .gitlab-ci.yml file to run pipeline

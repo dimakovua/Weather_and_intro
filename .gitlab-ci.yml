@@ -1,9 +1,15 @@
+image: gcc
 build-job:
   stage: build
   script:
-    -  cd ..
+    - apt update
+    - apt install clang-tidy -y
+    - apt install clang -y
+    - apt install cppcheck -y
+    - cd ..
     - rm -r googletest
     - git clone https://github.com/google/googletest.git
     - cd dmytro.kovalenko
+    - make cppcheck
+    - make clang-tidy
     - make
-

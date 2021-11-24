@@ -24,12 +24,14 @@ endif
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g -std=gnu++11 -Wall -Wextra -pthread
+CXXFLAGS += -std=c++11 -Wall -Wextra -pedantic -Werror
+CXXFLAGS_for_tests += -std=c++11 -Wall -Wextra -pedantic
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
 TESTS = coder_gTest
-
+CXX = clang++
+CXX_for_tests = g++
 SOURCE_DIR = project
 LIB_DIR = project
 TEST_DIR = test
@@ -74,6 +76,7 @@ endif
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
+
 # House-keeping build targets.
 all : $(TESTS)
 
@@ -90,12 +93,16 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 # implementation details, the dependencies specified below are
 # conservative and not optimized.  This is fine as Google Test
 # compiles fast and for ordinary users its source rarely changes.
+cppcheck :
+	cppcheck --language=c++ project/coder.cpp project/coder.h
+clang-tidy :
+	clang-tidy -p -extra-arg=-std=c++11 --header-filter=project/coder.h  project/coder.cpp
 gtest-all.o : $(GTEST_SRCS_)
 	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
             $(GTEST_DIR)/src/gtest-all.cc
 
 gtest_main.o : $(GTEST_SRCS_)
-	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
+	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS_for_tests) -c \
             $(GTEST_DIR)/src/gtest_main.cc
 
 gtest.a : gtest-all.o
@@ -108,13 +115,13 @@ gtest_main.a : gtest-all.o gtest_main.o
 # gtest_main.a, depending on whether it defines its own main()
 # function.
 coder.o : $(SOURCE_DIR)/coder.cpp $(SOURCE_DIR)/coder.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SOURCE_DIR)/coder.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SOURCE_DIR)/coder.cpp -fsanitize=address,undefined
 
 coder_gTest.o : $(TEST_DIR)/coder_gTest.cpp $(SOURCE_DIR)/coder.h $(GTEST_HEADERS)
-	$(CXX) $(CPPFLAGS) -I$(SOURCE_DIR) $(CXXFLAGS) -c $(TEST_DIR)/coder_gTest.cpp
+	$(CXX) $(CPPFLAGS) -I$(SOURCE_DIR) $(CXXFLAGS_for_tests) -c $(TEST_DIR)/coder_gTest.cpp
 
 coder_gTest : coder.o coder_gTest.o gtest_main.a
 	@echo "Building $@ for $(KERNEL_NAME) $(MACHINE_NAME)"
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@ -L. -L$(LIB_DIR) -l$(LIB_ENCODE)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@ -L. -L$(LIB_DIR) -l$(LIB_ENCODE) -fsanitize=address,undefined
 	./$(TESTS)
 

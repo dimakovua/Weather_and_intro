@@ -27,7 +27,8 @@ void encode(char* buf, int size);
  * Coder class header.
  *
  */
-class Coder {
+
+class Coder {  // NOLINT class 'Coder' does not define a move constructor
  public:
   Coder(const Coder& right);
   Coder();
@@ -41,10 +42,11 @@ class Coder {
   Coder& operator=(const Coder& right);
 
  private:
-  char* m_buf;
-  long long m_size;
+  char* m_buf = nullptr;  // NOLINT invalid case style for private member
+                          // 'm_buf'
+  long long m_size = 0;   // NOLINT invalid case style for private member
+                          // 'm_size'
 };
-
 #pragma pack(pop)
 
 #endif  // CODER_H
