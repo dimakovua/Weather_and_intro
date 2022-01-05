@@ -46,6 +46,7 @@ void ClientLayer::Client::Parse_Json(std::string answer_in_json){
         try{
             if (!root.get<std::string>("message").empty()){
                 std::cout << "Can't get weather in " << m_city << "\n";
+                return;
             }
         }
         catch (...){}
