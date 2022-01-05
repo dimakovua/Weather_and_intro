@@ -35,7 +35,8 @@ void ClientLayer::Client::process(){
         Parse_Json(answer_json);
     }
     else{
-        std::cout << "Can't reach server!" << std::endl;
+        std::cout << "Can't reach server";
+        return;
     }
 }
 void ClientLayer::Client::Parse_Json(std::string answer_in_json){
