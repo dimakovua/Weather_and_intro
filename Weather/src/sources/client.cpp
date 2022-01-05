@@ -3,7 +3,7 @@
 
 ClientLayer::Client::Client(const NetworkLayer::ContextPtr & context_ptr) : m_connection(new NetworkLayer::Network(context_ptr, {m_address, m_port})){
     std::fstream token_file;
-    token_file.open("../token.txt");
+    token_file.open("token.txt");
     std::string part_of_token;
     while(token_file >> part_of_token){
         m_token+=part_of_token;
